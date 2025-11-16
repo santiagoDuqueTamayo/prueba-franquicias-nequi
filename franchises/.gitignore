@@ -29,5 +29,21 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+# Terraform
+terraform/.terraform/
+terraform/.terraform.lock.hcl
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
+terraform/*.tfvars
+!terraform/*.tfvars.example
+terraform/.terraform.tfstate.lock.info
+terraform/crash.log
+terraform/*.log
+
+# Secrets
+.env
+*.pem
+*.key
+
 ### VS Code ###
 .vscode/
