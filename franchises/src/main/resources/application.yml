@@ -1,0 +1,30 @@
+# src/main/resources/application.yml
+
+spring:
+  application:
+    name: franchises-api
+
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      database: ${MONGODB_DATABASE:franchises_db}
+
+server:
+  port: 8080
+
+# Actuator (para health checks)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      show-details: when-authorized
+
+logging:
+  level:
+    root: INFO
+    com.nequi.franchises.franchises: DEBUG
+    org.springframework.data.mongodb: DEBUG
+    org.springframework.data.mongodb.core: DEBUG

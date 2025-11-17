@@ -1,0 +1,11 @@
+
+spring:
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      database: ${MONGODB_DATABASE:franchises_db}
+
+logging:
+  level:
+    com.nequi.franchises.franchises: DEBUG
+    org.springframework.data.mongodb: DEBUG
