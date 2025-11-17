@@ -1,0 +1,37 @@
+# Git
+.git
+.gitignore
+
+# Maven
+target/
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea
+.vscode
+*.iml
+*.iws
+*.ipr
+
+# Docker
+docker/
+*.md
+
+# Tests
+src/test/
+
+# Terraform
+terraform/
+
+# Secrets
+.env
+*.pem
+*.key
+connection_string.txt
+db_username.txt
+db_password.txt
+
+# Logs
+*.log
+
+
