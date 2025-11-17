@@ -1,9 +1,13 @@
 package com.nequi.franchises.franchises.presentation.handler;
 
+import com.nequi.franchises.franchises.application.dto.request.AddFranchiseRequest;
 import com.nequi.franchises.franchises.application.dto.request.AddProductRequest;
 import com.nequi.franchises.franchises.application.dto.request.RemoveProductRequest;
+import com.nequi.franchises.franchises.application.dto.request.UpdateFranchiseNameRequest;
 import com.nequi.franchises.franchises.application.dto.request.UpdateProductNameRequest;
 import com.nequi.franchises.franchises.application.dto.request.UpdateProductStockRequest;
+import com.nequi.franchises.franchises.application.usecase.in.franchise.AddFranchiseUseCase;
+import com.nequi.franchises.franchises.application.usecase.in.franchise.UpdateFranchiseNameUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.product.AddProductToBranchUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.product.RemoveProductFromBranchUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.product.UpdateProductNameUseCase;
@@ -25,10 +29,37 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class FranchiseHandler {
 
+    private final AddFranchiseUseCase addFranchiseUseCase;
+    private final UpdateFranchiseNameUseCase updateFranchiseNameUseCase;
     private final AddProductToBranchUseCase addProductToBranchUseCase;
     private final RemoveProductFromBranchUseCase removeProductFromBranchUseCase;
     private final UpdateProductNameUseCase updateProductNameUseCase;
     private final UpdateProductStockUseCase updateProductStockUseCase;
+
+    // ========================================
+    // ADD FRANCHISE
+    // ========================================
+    public Mono<ServerResponse> addFranchise(ServerRequest request) {
+        return request.bodyToMono(AddFranchiseRequest.class)
+                .doOnNext(req -> log.info("Received request to add franchise: {}", req.getFranchiseName()))
+                .flatMap(addFranchiseUseCase::execute)
+                .flatMap(response -> ServerResponse.status(HttpStatus.CREATED).bodyValue(response))
+                .onErrorResume(this::handleError);
+    }
+
+    // ========================================
+    // UPDATE FRANCHISE NAME
+    // ========================================
+    public Mono<ServerResponse> updateFranchiseName(ServerRequest request) {
+        String franchiseId = request.pathVariable("franchiseId");
+
+        return request.bodyToMono(UpdateFranchiseNameRequest.class)
+                .doOnNext(req -> log.info("Received request to update franchise name: {} -> {}",
+                        franchiseId, req.getNewName()))
+                .flatMap(updateRequest -> updateFranchiseNameUseCase.execute(franchiseId, updateRequest))
+                .flatMap(response -> ServerResponse.ok().bodyValue(response))
+                .onErrorResume(this::handleError);
+    }
 
     // ========================================
     // ADD PRODUCT (ya existente)

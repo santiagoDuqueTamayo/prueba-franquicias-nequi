@@ -1,13 +1,15 @@
-package com.nequi.franchises.franchises.infrastructure.persistence.mongo.mapper;
+package com.nequi.franchises.franchises.infrastructure.persistence.mongo;
 
 import com.nequi.franchises.franchises.domain.model.Branch;
 import com.nequi.franchises.franchises.domain.model.Franchise;
 import com.nequi.franchises.franchises.domain.model.Product;
 import com.nequi.franchises.franchises.infrastructure.persistence.mongo.document.*;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class MongoMapper {
 
     // --------------------------------------------

@@ -14,6 +14,22 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 public class FranchiseRouter {
 
     @Bean
+    public RouterFunction<ServerResponse> franchiseRoutes(FranchiseHandler handler) {
+        return route()
+                // Agregar franquicia
+                .POST("/api/v1/franchises",
+                        accept(MediaType.APPLICATION_JSON),
+                        handler::addFranchise)
+
+                // Actualizar nombre de franquicia
+                .PUT("/api/v1/franchises/{franchiseId}/name",
+                        accept(MediaType.APPLICATION_JSON),
+                        handler::updateFranchiseName)
+
+                .build();
+    }
+
+    @Bean
     public RouterFunction<ServerResponse> productRoutes(FranchiseHandler handler) {
         return route()
                 // Agregar producto

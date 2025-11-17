@@ -1,7 +1,9 @@
 package com.nequi.franchises.franchises.application.usecase.in.branch;
 
-import com.nequi.franchises.franchises.domain.model.Branch;
+import com.nequi.franchises.franchises.application.dto.request.AddBranchRequest;
+import com.nequi.franchises.franchises.application.dto.response.BranchResponse;
+import reactor.core.publisher.Mono;
 
 public interface AddBranchUseCase {
-    Branch addBranch(String franchiseId, String branchName);
+    Mono<BranchResponse> execute(String franchiseId, AddBranchRequest request);
 }

@@ -2,7 +2,6 @@ package com.nequi.franchises.franchises.infrastructure.persistence.mongo;
 import com.nequi.franchises.franchises.domain.model.Franchise;
 import com.nequi.franchises.franchises.domain.port.out.FranchiseRepositoryPort;
 import com.nequi.franchises.franchises.infrastructure.persistence.MongoFranchiseRepository;
-import com.nequi.franchises.franchises.infrastructure.persistence.mongo.mapper.MongoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
