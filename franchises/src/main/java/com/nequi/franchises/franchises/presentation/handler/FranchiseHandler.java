@@ -7,6 +7,7 @@ import com.nequi.franchises.franchises.application.dto.request.UpdateFranchiseNa
 import com.nequi.franchises.franchises.application.dto.request.UpdateProductNameRequest;
 import com.nequi.franchises.franchises.application.dto.request.UpdateProductStockRequest;
 import com.nequi.franchises.franchises.application.usecase.in.franchise.AddFranchiseUseCase;
+import com.nequi.franchises.franchises.application.usecase.in.franchise.GetTopProductsByStockUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.franchise.UpdateFranchiseNameUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.product.AddProductToBranchUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.product.RemoveProductFromBranchUseCase;
@@ -31,6 +32,7 @@ public class FranchiseHandler {
 
     private final AddFranchiseUseCase addFranchiseUseCase;
     private final UpdateFranchiseNameUseCase updateFranchiseNameUseCase;
+    private final GetTopProductsByStockUseCase getTopProductsByStockUseCase;
     private final AddProductToBranchUseCase addProductToBranchUseCase;
     private final RemoveProductFromBranchUseCase removeProductFromBranchUseCase;
     private final UpdateProductNameUseCase updateProductNameUseCase;
@@ -113,6 +115,19 @@ public class FranchiseHandler {
                 .doOnNext(req -> log.info("Received request to update product name: {} -> {} in branch: {}",
                         req.getProductName(), req.getNewName(), req.getBranchName()))
                 .flatMap(updateRequest -> updateProductNameUseCase.execute(franchiseId, updateRequest))
+                .flatMap(response -> ServerResponse.ok().bodyValue(response))
+                .onErrorResume(this::handleError);
+    }
+
+    // ========================================
+    // GET TOP PRODUCTS BY STOCK
+    // ========================================
+    public Mono<ServerResponse> getTopProductsByStock(ServerRequest request) {
+        String franchiseId = request.pathVariable("franchiseId");
+
+        return Mono.just(franchiseId)
+                .doOnNext(id -> log.info("Received request to get top products by stock: franchiseId={}", id))
+                .flatMap(getTopProductsByStockUseCase::execute)
                 .flatMap(response -> ServerResponse.ok().bodyValue(response))
                 .onErrorResume(this::handleError);
     }

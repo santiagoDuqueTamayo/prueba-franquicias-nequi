@@ -52,6 +52,11 @@ public class FranchiseRouter {
                         accept(MediaType.APPLICATION_JSON),
                         handler::updateProductStock)
 
+                // Obtener top productos por stock
+                .GET("/api/v1/franchises/{franchiseId}/products/top",
+                        accept(MediaType.APPLICATION_JSON),
+                        handler::getTopProductsByStock)
+
                 .build();
     }
 }

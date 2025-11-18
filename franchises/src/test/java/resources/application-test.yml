@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:%7Bm%3AMN%288F%5B0I%3DIH%28G@franchies-cluster.ttjhutb.mongodb.net/?retryWrites=true&w=majority&appName=franchies-cluster
+      database: franchises_db
+
+logging:
+  level:
+    com.nequi.franchises.franchises: DEBUG
