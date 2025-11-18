@@ -88,6 +88,8 @@ MongoDB almacena este agregado como **documento único por franquicia**.
 
 La api se puede probar en la nube railway, la colección esta diseñada para que al ejecutar el endpoint inicial crear franquicia, el id de respuesta de esa franquicia sea incluido en el pathvariable que existen en el resto de endpoints.
 
+Nota: el endpoint para listar franquicias, existe solo para efectos de seguimiento de las pruebas, para ir evidenciando cómo se comporta la BD, aunque si es de su preferencia pueden instalar cliente mongo  y utilizar el string de conexión para hacer seguimiento a la data que se inserta en la bd.
+
 Incluyo:
 
 *✔️ **Colección Postman con todos los endpoints**
@@ -99,8 +101,8 @@ Incluyo:
 
 En Postman:
 
-`Environments → Select → Local`
 `Environments → Select → int (aca se encuentra la nube)`
+`Environments → Select → Local`
 
 ### Variables:
 
