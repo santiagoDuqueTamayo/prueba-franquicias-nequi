@@ -1,0 +1,313 @@
+{
+	"info": {
+		"_postman_id": "f76c9ffc-55d3-4e6f-9cef-61ffa864402f",
+		"name": "franchises",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "11256678",
+		"_collection_link": "https://solar-star-901231.postman.co/workspace/Team-Workspace~9a764df7-576a-4cd1-814d-4000161e80e4/collection/11256678-f76c9ffc-55d3-4e6f-9cef-61ffa864402f?action=share&source=collection_link&creator=11256678"
+	},
+	"item": [
+		{
+			"name": "crear franquicias",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Verifica si la solicitud fue exitosa (código 201 Created o 200 OK)\r",
+							"pm.test(\"Status code is 201 or 200\", function () {\r",
+							"    pm.response.to.have.status([200, 201]);\r",
+							"});\r",
+							"\r",
+							"// 1. Parsear el cuerpo de la respuesta (Response Body) como JSON\r",
+							"var responseJson = pm.response.json();\r",
+							"\r",
+							"// 2. Extraer el ID de la entidad (Asegúrate que la propiedad sea la correcta, ej: 'id', 'franchiseId', etc.)\r",
+							"// Asumo que tu respuesta JSON tiene una propiedad llamada 'id'\r",
+							"var newFranchiseId = responseJson.id; \r",
+							"\r",
+							"// 3. Verificar si el ID existe\r",
+							"pm.test(\"Response body includes a Franchise ID\", function () {\r",
+							"    pm.expect(newFranchiseId).to.be.a('string').and.to.have.lengthOf.at.least(1);\r",
+							"});\r",
+							"\r",
+							"// 4. Guardar el ID extraído en la variable de entorno 'franchiseId'\r",
+							"// Esto lo hace disponible para todas las demás peticiones en este entorno.\r",
+							"pm.environment.set(\"franchiseId\", newFranchiseId);\r",
+							"\r",
+							"console.log(\"-> Franchise ID guardado: \" + newFranchiseId);"
+						],
+						"type": "text/javascript",
+						"packages": {},
+						"requests": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"franchiseName\": \"Bogotana de pizzas\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TYPE_HTTP}}://{{BASE_URL}}/api/v1/franchises",
+					"protocol": "{{TYPE_HTTP}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franchises"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear sucursal",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"branchName\": \"Sucursal Norte\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TYPE_HTTP}}://{{BASE_URL}}/api/v1/franchises/{{franchiseId}}/branches",
+					"protocol": "{{TYPE_HTTP}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franchises",
+						"{{franchiseId}}",
+						"branches"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Crear producto en la sucursal",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"productName\": \"Hamburguesa con papas\",\r\n    \"branchName\": \"Sucursal Norte\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TYPE_HTTP}}://{{BASE_URL}}/api/v1/franchises/{{franchiseId}}/products",
+					"protocol": "{{TYPE_HTTP}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franchises",
+						"{{franchiseId}}",
+						"products"
+					]
+				},
+				"description": "Generated from cURL: curl -X POST http://localhost:8080/api/v1/franchises/123/products \\\r\n  -H \"Content-Type: application/json\" \\\r\n  -d '{\r\n        \"productName\": \"Gaseosa Cola\",\r\n        \"branchName\": \"Sucursal Centro\"\r\n      }'\r\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar stock del producto",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"branchName\": \"Sucursal Norte\",\r\n    \"productName\":\"Hamburguesa con papas\",\r\n    \"newStock\":\"50\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TYPE_HTTP}}://{{BASE_URL}}/api/v1/franchises/{{franchiseId}}/products/stock",
+					"protocol": "{{TYPE_HTTP}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franchises",
+						"{{franchiseId}}",
+						"products",
+						"stock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar nombre del producto",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"branchName\": \"Sucursal Sur\",\r\n    \"productName\":\"Hamburguesa con papas\",\r\n    \"newName\":\"malteada\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TYPE_HTTP}}://{{BASE_URL}}/api/v1/franchises/{{franchiseId}}/products/name",
+					"protocol": "{{TYPE_HTTP}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franchises",
+						"{{franchiseId}}",
+						"products",
+						"name"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "actualizar nombre de la franquicia",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newName\":\"Mister pompy\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TYPE_HTTP}}://{{BASE_URL}}/api/v1/franchises/{{franchiseId}}/name",
+					"protocol": "{{TYPE_HTTP}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franchises",
+						"{{franchiseId}}",
+						"name"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar el nombre de la sucursal",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"oldName\":\"Sucursal Norte\",\r\n    \"newName\":\"Sucursal Sur\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{TYPE_HTTP}}://{{BASE_URL}}/api/v1/franchises/{{franchiseId}}/branches/name",
+					"protocol": "{{TYPE_HTTP}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franchises",
+						"{{franchiseId}}",
+						"branches",
+						"name"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener maximo sotck por sucursal",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TYPE_HTTP}}://{{BASE_URL}}/api/v1/franchises/{{franchiseId}}/products/top",
+					"protocol": "{{TYPE_HTTP}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franchises",
+						"{{franchiseId}}",
+						"products",
+						"top"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Listar Franquicias",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{TYPE_HTTP}}://{{BASE_URL}}/api/v1/franchises/list",
+					"protocol": "{{TYPE_HTTP}}",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"franchises",
+						"list"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
