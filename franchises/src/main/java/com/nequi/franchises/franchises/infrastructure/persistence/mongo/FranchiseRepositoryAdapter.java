@@ -1,10 +1,12 @@
 package com.nequi.franchises.franchises.infrastructure.persistence.mongo;
+import com.nequi.franchises.franchises.application.dto.response.FranchisesListResponse;
 import com.nequi.franchises.franchises.domain.model.Franchise;
 import com.nequi.franchises.franchises.domain.port.out.FranchiseRepositoryPort;
 import com.nequi.franchises.franchises.infrastructure.persistence.MongoFranchiseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -75,6 +77,22 @@ public class FranchiseRepositoryAdapter implements FranchiseRepositoryPort {
         return mongoRepository.existsByNameIgnoreCase(name)
                 .doOnSuccess(exists -> log.debug("Franchise with name '{}' exists: {}", name, exists))
                 .doOnError(error -> log.error("Error checking franchise existence: {}", error.getMessage()));
+    }
+
+    @Override
+    public Flux<Franchise> findAll() {
+        log.debug("getAll franchies");
+        return mongoRepository.findAll()
+                .map(mongoMapper::toDomain)
+                // 1. Hook para cada elemento emitido (loguea que encontramos uno)
+                .doOnNext(franchise -> log.info("Franchise found: {}", franchise.getId()))
+                // 2. Hook para cuando el Flux está vacío (0 elementos)
+                // Si el stream está vacío, este switch se activa y ejecuta el log.
+                .switchIfEmpty(Flux.defer(() -> {
+                    log.warn("Franchise empty");
+                    return Flux.empty();
+                }))
+                .doOnError(error -> log.error("Error retrieving franchises: {}", error.getMessage()));
     }
 
     @Override

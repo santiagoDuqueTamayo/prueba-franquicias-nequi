@@ -8,6 +8,7 @@ import com.nequi.franchises.franchises.application.dto.request.UpdateProductName
 import com.nequi.franchises.franchises.application.dto.request.UpdateProductStockRequest;
 import com.nequi.franchises.franchises.application.usecase.in.franchise.AddFranchiseUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.franchise.GetTopProductsByStockUseCase;
+import com.nequi.franchises.franchises.application.usecase.in.franchise.ListAllFranchisesUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.franchise.UpdateFranchiseNameUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.product.AddProductToBranchUseCase;
 import com.nequi.franchises.franchises.application.usecase.in.product.RemoveProductFromBranchUseCase;
@@ -20,9 +21,11 @@ import com.nequi.franchises.franchises.domain.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -37,6 +40,7 @@ public class FranchiseHandler {
     private final RemoveProductFromBranchUseCase removeProductFromBranchUseCase;
     private final UpdateProductNameUseCase updateProductNameUseCase;
     private final UpdateProductStockUseCase updateProductStockUseCase;
+    private final ListAllFranchisesUseCase listAllFranchisesUseCase;
 
     // ========================================
     // ADD FRANCHISE
@@ -75,6 +79,21 @@ public class FranchiseHandler {
                 .flatMap(response -> ServerResponse.ok().bodyValue(response))
                 .onErrorResume(error -> handleError(error));
     }
+
+    // ========================================
+    // list franchises
+    // ========================================
+    public Mono<ServerResponse> getFranchises(ServerRequest request) {
+        return listAllFranchisesUseCase.execute()
+                .collectList()
+                .flatMap(list ->
+                        ServerResponse.ok()
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .bodyValue(list)
+                )
+                .onErrorResume(this::handleError);
+    }
+
 
     // ========================================
     // REMOVE PRODUCT (nuevo)

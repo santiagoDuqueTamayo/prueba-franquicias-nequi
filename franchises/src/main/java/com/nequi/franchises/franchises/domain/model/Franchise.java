@@ -136,6 +136,8 @@ public class Franchise {
         return id;
     }
 
+    public List<Branch> getAllBranches() { return branches; }
+
     public void setId(String id) {
         this.id = id;
     }
